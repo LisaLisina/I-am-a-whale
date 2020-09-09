@@ -8,10 +8,10 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-def draw_whale(x,padding=2):
+def draw_whale(x,shape_width,padding=2):
+    x=x+shape_width/4
     top = padding+10
     bottom = height-padding
-    shape_width = 70
     # Move left to right keeping track of the current x position for drawing shapes.
     # x = padding+40
     # Draw an ellipse.
@@ -22,7 +22,8 @@ def draw_whale(x,padding=2):
     # Draw a triangle.
     belly = (bottom-top)
     center = top + belly/2
-    draw.polygon([(x,center) , (x-shape_width/4, center-belly/4), (x-shape_width/4, center+belly/4)], outline=255, fill=0)
+    fin = x-shape_width/4
+    draw.polygon([(x,center) , (fin, center-belly/4), (fin, center+belly/4)], outline=255, fill=0)
 
     water = (x+shape_width/2)
     draw.polygon([(water, top+belly/8), (water-shape_width/16, padding), (water+shape_width/16, padding)], outline=255, fill=1)
@@ -53,7 +54,8 @@ disp.begin()
 disp.clear()
 disp.display()
 
-x=-100
+whale_width=30
+x=-whale_width
 while True:
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
@@ -62,10 +64,15 @@ while True:
     draw = ImageDraw.Draw(image)
 # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
-# First define some constants to allow easy resizing of shapes.
-    draw_whale(x)
+# Draw the beauty
+    draw_whale(x,whale_width)
+    draw_whale(x-50,whale_width-10)
+    draw_whale(x-100,whale_width-20)
 # Display image.
     disp.image(image)
     disp.display()
     x+=1
-    time.sleep(.05)
+    time.sleep(.0)
+    if x-100 >width: x=-whale_width
+
+print("finish")
